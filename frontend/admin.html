@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queen Sheba | Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0705;
+      --bg-sidebar: #0e0a07;
+      --bg-card: #130e0a;
+      --bg-card-hover: #19130d;
+      --border-color: #241b14;
+      --border-gold: rgba(212, 175, 55, 0.35);
+      
+      --gold-primary: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-muted: #a38c5b;
+      
+      --pill-active-bg: linear-gradient(90deg, #441318 0%, #2f0d11 100%);
+      --pill-active-border: #74252c;
+      
+      --text-main: #f5eedc;
+      --text-muted: #9c8e7c;
+      --text-dim: #6e6150;
+      
+      --status-shipped: #22c55e;
+      --status-processing: #f59e0b;
+      --status-delivered: #38bdf8;
+      --status-cancelled: #ef4444;
+      
+      --font-display: 'Cinzel', serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Warning Banner */
+    .top-warning-banner {
+      background: #140902;
+      border-bottom: 1px solid rgba(229, 169, 59, 0.35);
+      color: #f7b731;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 50;
+    }
+
+    /* Master Admin Layout: Sidebar + Main Content */
+    .admin-layout-wrapper {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 35px);
+    }
+
+    /* Left Sidebar */
+    .admin-sidebar {
+      width: 260px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 30;
+    }
+
+    .sidebar-brand {
+      padding: 24px 20px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-crown-icon {
+      width: 38px;
+      height: 38px;
+      fill: var(--gold-primary);
+      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+      margin-bottom: 6px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #f5eedc;
+    }
+
+    .brand-subtitle {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-category-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--text-dim);
+      padding: 14px 12px 6px 12px;
+      text-transform: uppercase;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      color: #b5a999;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .nav-btn:hover {
+      background: rgba(212, 175, 55, 0.06);
+      color: #f5eedc;
+    }
+
+    .nav-btn.active {
+      background: var(--pill-active-bg);
+      border-color: var(--pill-active-border);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(116, 37, 44, 0.3);
+    }
+
+    .nav-btn.active svg {
+      color: var(--gold-primary);
+    }
+
+    /* Sidebar Bottom Status Card (Exact Match) */
+    .sidebar-status-card {
+      margin: 12px;
+      background: #150f0b;
+      border: 1px solid rgba(224, 72, 72, 0.4);
+      border-radius: 10px;
+      padding: 14px 12px;
+    }
+
+    .status-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .status-card-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: #f7eedd;
+      text-transform: uppercase;
+    }
+
+    .status-shield-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--gold-primary);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      margin-bottom: 6px;
+      color: #a89d8e;
+    }
+
+    .status-badge-off {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 0.74rem;
+    }
+
+    .status-badge-off::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #ef4444;
+    }
+
+    .status-env-box {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(224, 72, 72, 0.2);
+    }
+
+    .status-env-label {
+      font-size: 0.68rem;
+      color: #8c8071;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-env-val {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ef4444;
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+    }
+
+    /* Main View Area */
+    .admin-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Bar */
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 36px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(10, 7, 5, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 25;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hamburger-btn {
+      background: none;
+      border: none;
+      color: #c5b9a8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .page-main-heading {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .page-subheading {
+      font-size: 0.82rem;
+      color: #9c8e7c;
+      margin-top: 1px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .notif-btn {
+      background: none;
+      border: none;
+      color: #d4af37;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      background: #e04848;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border: 1px solid var(--border-gold);
+      background: #140f0c;
+      border-radius: 30px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .user-avatar-crown {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold-primary);
+    }
+
+    .user-pill-text {
+      text-align: left;
+    }
+
+    .user-pill-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #f7eedd;
+      line-height: 1.2;
+    }
+
+    .user-pill-role {
+      font-size: 0.7rem;
+      color: var(--gold-muted);
+    }
+
+    /* Content Area */
+    .admin-content {
+      padding: 32px 36px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Section Views */
+    .view-section {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .view-section.active-view {
+      display: flex;
+    }
+
+    /* 4 Metric Cards (Exact Match) */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .metric-card:hover {
+      border-color: rgba(212, 175, 55, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .metric-top-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .metric-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      background: rgba(212, 175, 55, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    .metric-label {
+      font-size: 0.82rem;
+      color: #9c8e7c;
+      font-weight: 500;
+    }
+
+    .metric-value {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      margin-top: 2px;
+    }
+
+    .metric-footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #c59b27;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .metric-footer-link:hover {
+      color: #f3e5ab;
+    }
+
+    /* Middle 2-Column Section (Recent Orders & Top Products) */
+    .dashboard-mid-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f7eedd;
+    }
+
+    .panel-action-link {
+      font-size: 0.82rem;
+      color: #c59b27;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .panel-action-link:hover {
+      color: #f3e5ab;
+    }
+
+    /* Orders Table */
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .admin-table th {
+      text-align: left;
+      color: #7b6f60;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .admin-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(36, 27, 20, 0.6);
+      color: #ded3c4;
+    }
+
+    .order-id-gold {
+      color: #e5b958;
+      font-weight: 600;
+    }
+
+    /* Status Pills */
+    .status-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .status-pill.shipped {
+      background: rgba(34, 197, 94, 0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .status-pill.processing {
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .status-pill.delivered {
+      background: rgba(56, 189, 248, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .status-pill.cancelled {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-view-all-orders {
+      margin-top: 18px;
+      width: 100%;
+      background: #1b120c;
+      border: 1px solid var(--border-color);
+      color: #c59b27;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .btn-view-all-orders:hover {
+      background: #251a12;
+      border-color: rgba(212, 175, 55, 0.4);
+      color: #fff;
+    }
+
+    /* Top Products Rows */
+    .top-product-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(36, 27, 20, 0.6);
+    }
+
+    .top-product-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .product-thumb-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+      background: #080605;
+    }
+
+    .product-info-name {
+      font-weight: 600;
+      color: #f7eedd;
+      font-size: 0.88rem;
+    }
+
+    .product-info-cat {
+      font-size: 0.74rem;
+      color: #8c8070;
+    }
+
+    .top-product-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .product-stock-num {
+      font-size: 0.85rem;
+      color: #d1c5b4;
+    }
+
+    .product-price-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #ffffff;
+      min-width: 70px;
+      text-align: right;
+    }
+
+    /* Bottom Row: AI Demo Information (Exact Match) */
+    .ai-demo-info-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .ai-demo-heading {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f7eedd;
+      margin-bottom: 18px;
+    }
+
+    .ai-demo-params-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .ai-param-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #0e0a07;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .ai-param-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    .ai-param-label {
+      font-size: 0.72rem;
+      color: #8c8070;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ai-param-val {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-on {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    /* Interactive Crud Buttons & Modals */
+    .btn-gold-action {
+      background: var(--gold-primary);
+      color: #120e0b;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-gold-action:hover {
+      background: var(--gold-light);
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: #16100c;
+      border: 1px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 28px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: #f7eedd;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: #9c8e7c;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .modal-form-group {
+      margin-bottom: 14px;
+    }
+
+    .modal-form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #c4b8a7;
+      margin-bottom: 4px;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: #0d0a08;
+      border: 1px solid #33271e;
+      border-radius: 6px;
+      padding: 9px 12px;
+      color: white;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--gold-primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-secondary {
+      background: #251b14;
+      border: 1px solid #3d2c20;
+      color: #d1c4b2;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Footer (Exact Match) */
+    .admin-footer {
+      border-top: 1px solid var(--border-color);
+      background: #080605;
+      padding: 14px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #7b6f60;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-crown {
+      width: 16px;
+      height: 16px;
+      fill: var(--gold-primary);
+    }
+
+    .footer-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(212, 175, 55, 0.4);
+    }
+
+    .footer-right {
+      color: #ef4444;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    /* Responsive */
+    @media (max-width: 1280px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .ai-demo-params-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dashboard-mid-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .admin-sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Alert Banner -->
+  <div class="top-warning-banner">
+    <span>⚠️</span>
+    <span>AI DEMO ENVIRONMENT – INTENTIONALLY VULNERABLE</span>
+  </div>
+
+  <div class="admin-layout-wrapper">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <svg class="brand-crown-icon" viewBox="0 0 24 24">
+          <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+        </svg>
+        <div class="brand-title">QUEEN SHEBA</div>
+        <div class="brand-subtitle">ADMIN PANEL</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" onclick="switchAdminTab('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-btn" onclick="switchAdminTab('products')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Products</span>
+        </button>
+
+        <button class="nav-btn" onclick="switchAdminTab('customers')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>Customers</span>
+        </button>
+
+        <button class="nav-btn" onclick="switchAdminTab('orders')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="21 8 21 21 3 21 3 8"></polyline>
+            <rect x="1" y="3" width="22" height="5"></rect>
+            <line x1="10" y1="12" x2="14" y2="12"></line>
+          </svg>
+          <span>Orders</span>
+        </button>
+
+        <button class="nav-btn" onclick="switchAdminTab('aidemo')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>AI Demo</span>
+        </button>
+
+        <button class="nav-btn" onclick="switchAdminTab('internaldata')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          </svg>
+          <span>Internal Demo Data</span>
+        </button>
+
+        <button class="nav-btn" onclick="alert('Settings configured via .env and environment variables.')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Settings</span>
+        </button>
+
+        <div class="nav-category-title">OTHER</div>
+
+        <button class="nav-btn" onclick="alert('Demo Admin User: admin@queensheba.demo (Role: admin)')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Profile</span>
+        </button>
+
+        <button class="nav-btn" onclick="alert('Change Password is simulated in this demo environment.')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Change Password</span>
+        </button>
+
+        <button class="nav-btn" onclick="Auth.logout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Logout</span>
+        </button>
+      </nav>
+
+      <!-- Bottom Card: AI SECURITY STATUS (Exact match) -->
+      <div class="sidebar-status-card">
+        <div class="status-card-header">
+          <span class="status-card-title">AI SECURITY STATUS</span>
+          <svg class="status-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <div class="status-row">
+          <span>Prompt Firewall</span>
+          <span class="status-badge-off">OFF</span>
+        </div>
+        <div class="status-row">
+          <span>Input Protection</span>
+          <span class="status-badge-off">OFF</span>
+        </div>
+        <div class="status-row">
+          <span>Output Protection</span>
+          <span class="status-badge-off">OFF</span>
+        </div>
+        <div class="status-env-box">
+          <div class="status-env-label">Environment</div>
+          <div class="status-env-val">INTENTIONALLY VULNERABLE</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT -->
+    <main class="admin-main">
+      
+      <!-- Top Bar -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" onclick="alert('Sidebar toggle')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div>
+            <h1 class="page-main-heading" id="topbar-title">Dashboard</h1>
+            <div class="page-subheading" id="topbar-subtitle">Welcome back, Admin!</div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notif-btn" title="Notifications" onclick="alert('Demo notifications:\n- 3 new orders received today\n- AI environment status: VULNERABLE\n- System health: OK')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="notif-badge">3</span>
+          </button>
+
+          <div class="admin-user-pill" onclick="if(confirm('Do you want to log out?')) Auth.logout();">
+            <div class="user-avatar-crown">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+              </svg>
+            </div>
+            <div class="user-pill-text">
+              <div class="user-pill-name" id="admin-user-name">Admin User</div>
+              <div class="user-pill-role">Administrator</div>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #8c8070;">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <div class="admin-content">
+
+        <!-- TAB 1: DASHBOARD VIEW (Exact Replica of Admin_panal.png) -->
+        <section id="view-dashboard" class="view-section active-view">
+          
+          <!-- 4 Stat Metric Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div>
+                <div class="metric-top-row">
+                  <div class="metric-icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="metric-label">Total Products</div>
+                    <div class="metric-value" id="stat-products">5</div>
+                  </div>
+                </div>
+              </div>
+              <a class="metric-footer-link" onclick="switchAdminTab('products')">View all products →</a>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-top-row">
+                  <div class="metric-icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="metric-label">Total Customers</div>
+                    <div class="metric-value" id="stat-customers">12</div>
+                  </div>
+                </div>
+              </div>
+              <a class="metric-footer-link" onclick="switchAdminTab('customers')">View all customers →</a>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-top-row">
+                  <div class="metric-icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                      <rect x="1" y="3" width="22" height="5"></rect>
+                      <line x1="10" y1="12" x2="14" y2="12"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="metric-label">Total Orders</div>
+                    <div class="metric-value" id="stat-orders">8</div>
+                  </div>
+                </div>
+              </div>
+              <a class="metric-footer-link" onclick="switchAdminTab('orders')">View all orders →</a>
+            </div>
+
+            <div class="metric-card">
+              <div>
+                <div class="metric-top-row">
+                  <div class="metric-icon-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                      <polyline points="4 8 12 2 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="metric-label">Today's Sales (Demo)</div>
+                    <div class="metric-value" id="stat-sales">$1,250</div>
+                  </div>
+                </div>
+              </div>
+              <a class="metric-footer-link" onclick="switchAdminTab('orders')">View reports →</a>
+            </div>
+          </div>
+
+          <!-- Middle 2-Column: Recent Orders & Top Products -->
+          <div class="dashboard-mid-grid">
+            
+            <!-- Left: Recent Orders -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title">Recent Orders</h3>
+                <a class="panel-action-link" onclick="switchAdminTab('orders')">View All Orders →</a>
+              </div>
+              <div style="overflow-x: auto;">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Product</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-orders-tbody">
+                    <!-- Loaded dynamically or matches exact screenshot -->
+                    <tr>
+                      <td class="order-id-gold">QS-1008</td>
+                      <td>Demo Customer One</td>
+                      <td>ShebaBook Pro</td>
+                      <td><span class="status-pill shipped">Shipped</span></td>
+                      <td>May 16, 2025</td>
+                      <td>⋮</td>
+                    </tr>
+                    <tr>
+                      <td class="order-id-gold">QS-1007</td>
+                      <td>Demo Customer Two</td>
+                      <td>Royal Headset</td>
+                      <td><span class="status-pill processing">Processing</span></td>
+                      <td>May 16, 2025</td>
+                      <td>⋮</td>
+                    </tr>
+                    <tr>
+                      <td class="order-id-gold">QS-1006</td>
+                      <td>Demo Customer Three</td>
+                      <td>Sheba Smart Watch</td>
+                      <td><span class="status-pill delivered">Delivered</span></td>
+                      <td>May 15, 2025</td>
+                      <td>⋮</td>
+                    </tr>
+                    <tr>
+                      <td class="order-id-gold">QS-1005</td>
+                      <td>Demo Customer Four</td>
+                      <td>Wireless Mouse</td>
+                      <td><span class="status-pill processing">Processing</span></td>
+                      <td>May 15, 2025</td>
+                      <td>⋮</td>
+                    </tr>
+                    <tr>
+                      <td class="order-id-gold">QS-1004</td>
+                      <td>Demo Customer Five</td>
+                      <td>Royal Keyboard</td>
+                      <td><span class="status-pill shipped">Shipped</span></td>
+                      <td>May 14, 2025</td>
+                      <td>⋮</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn-view-all-orders" onclick="switchAdminTab('orders')">View All Orders →</button>
+            </div>
+
+            <!-- Right: Top Products -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title">Top Products</h3>
+                <a class="panel-action-link" onclick="switchAdminTab('products')">View All Products →</a>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: #7b6f60; font-weight: 600; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+                <span>Product</span>
+                <div style="display: flex; gap: 40px; margin-right: 12px;">
+                  <span>Stock</span>
+                  <span>Price</span>
+                </div>
+              </div>
+              <div id="top-products-list">
+                <!-- Loaded dynamically or exact static backup -->
+                <div class="top-product-item">
+                  <div class="top-product-left">
+                    <img src="/images/product_laptop.jpg" class="product-thumb-img" alt="ShebaBook Pro">
+                    <div>
+                      <div class="product-info-name">ShebaBook Pro</div>
+                      <div class="product-info-cat">Laptop</div>
+                    </div>
+                  </div>
+                  <div class="top-product-right">
+                    <div class="product-stock-num">12</div>
+                    <div class="product-price-val">$899.00</div>
+                  </div>
+                </div>
+                <div class="top-product-item">
+                  <div class="top-product-left">
+                    <img src="/images/product_headset.jpg" class="product-thumb-img" alt="Royal Headset">
+                    <div>
+                      <div class="product-info-name">Royal Headset</div>
+                      <div class="product-info-cat">Audio</div>
+                    </div>
+                  </div>
+                  <div class="top-product-right">
+                    <div class="product-stock-num">25</div>
+                    <div class="product-price-val">$79.00</div>
+                  </div>
+                </div>
+                <div class="top-product-item">
+                  <div class="top-product-left">
+                    <img src="/images/product_smartwatch.jpg" class="product-thumb-img" alt="Sheba Smart Watch">
+                    <div>
+                      <div class="product-info-name">Sheba Smart Watch</div>
+                      <div class="product-info-cat">Wearables</div>
+                    </div>
+                  </div>
+                  <div class="top-product-right">
+                    <div class="product-stock-num">8</div>
+                    <div class="product-price-val">$129.00</div>
+                  </div>
+                </div>
+                <div class="top-product-item">
+                  <div class="top-product-left">
+                    <img src="/images/product_keyboard.jpg" class="product-thumb-img" alt="Royal Keyboard">
+                    <div>
+                      <div class="product-info-name">Royal Keyboard</div>
+                      <div class="product-info-cat">Accessories</div>
+                    </div>
+                  </div>
+                  <div class="top-product-right">
+                    <div class="product-stock-num">15</div>
+                    <div class="product-price-val">$49.00</div>
+                  </div>
+                </div>
+                <div class="top-product-item">
+                  <div class="top-product-left">
+                    <img src="/images/product_mouse.jpg" class="product-thumb-img" alt="Wireless Mouse">
+                    <div>
+                      <div class="product-info-name">Wireless Mouse</div>
+                      <div class="product-info-cat">Accessories</div>
+                    </div>
+                  </div>
+                  <div class="top-product-right">
+                    <div class="product-stock-num">22</div>
+                    <div class="product-price-val">$29.00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom: AI Demo Information (Exact match) -->
+          <div class="ai-demo-info-panel">
+            <h3 class="ai-demo-heading">AI Demo Information</h3>
+            <div class="ai-demo-params-grid">
+              
+              <div class="ai-param-card">
+                <div class="ai-param-icon-wrap">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                    <circle cx="12" cy="5" r="2"></circle>
+                    <path d="M12 7v4"></path>
+                    <line x1="8" y1="16" x2="8" y2="16"></line>
+                    <line x1="16" y1="16" x2="16" y2="16"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-param-label">LLM Provider</div>
+                  <div class="ai-param-val" id="info-llm-provider">OpenAI (Demo)</div>
+                </div>
+              </div>
+
+              <div class="ai-param-card">
+                <div class="ai-param-icon-wrap">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <line x1="9" y1="1" x2="9" y2="4"></line>
+                    <line x1="15" y1="1" x2="15" y2="4"></line>
+                    <line x1="9" y1="20" x2="9" y2="23"></line>
+                    <line x1="15" y1="20" x2="15" y2="23"></line>
+                    <line x1="20" y1="9" x2="23" y2="9"></line>
+                    <line x1="20" y1="14" x2="23" y2="14"></line>
+                    <line x1="1" y1="9" x2="4" y2="9"></line>
+                    <line x1="1" y1="14" x2="4" y2="14"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-param-label">Model</div>
+                  <div class="ai-param-val" id="info-llm-model">gpt-4o (Demo)</div>
+                </div>
+              </div>
+
+              <div class="ai-param-card">
+                <div class="ai-param-icon-wrap">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-param-label">Mock Mode</div>
+                  <div class="ai-param-val"><span class="badge-on" id="info-mock-mode">ON</span></div>
+                </div>
+              </div>
+
+              <div class="ai-param-card">
+                <div class="ai-param-icon-wrap">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-param-label">Conversation Memory</div>
+                  <div class="ai-param-val" id="info-memory">In-Memory</div>
+                </div>
+              </div>
+
+              <div class="ai-param-card">
+                <div class="ai-param-icon-wrap">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="7.5" cy="15.5" r="5.5"></circle>
+                    <path d="M21 2l-9.6 9.6"></path>
+                    <path d="M15.5 7.5l3 3L22 7l-3-3"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-param-label">Max Tokens</div>
+                  <div class="ai-param-val" id="info-tokens">4096</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+        <!-- TAB 2: PRODUCTS CRUD VIEW -->
+        <section id="view-products" class="view-section">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Product Catalog Management</h2>
+                <div class="page-subheading">View, add, edit, and manage demo e-commerce inventory</div>
+              </div>
+              <button class="btn-gold-action" onclick="openAddProductModal()">+ Add Demo Product</button>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Badge</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-products-tbody">
+                  <!-- Populated dynamically via /api/admin/products -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: CUSTOMERS VIEW -->
+        <section id="view-customers" class="view-section">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Demo Customers Directory</h2>
+                <div class="page-subheading">Fictional customer profiles and order counts</div>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Customer ID</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Orders</th>
+                    <th>Total Spent</th>
+                    <th>Registered Date</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-customers-tbody">
+                  <!-- Populated dynamically via /api/admin/customers -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: ORDERS VIEW -->
+        <section id="view-orders" class="view-section">
+          <div class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Fictional Order Records</h2>
+                <div class="page-subheading">Track and update order fulfillment status</div>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Tracking / Carrier</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-all-orders-tbody">
+                  <!-- Populated dynamically via /api/admin/orders -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 5: AI DEMO STATUS VIEW -->
+        <section id="view-aidemo" class="view-section">
+          <div class="panel-card">
+            <h2 class="panel-title" style="margin-bottom: 8px;">AI Vulnerability Testing Environment</h2>
+            <p class="page-subheading" style="margin-bottom: 24px;">This section provides transparent monitoring of the Queen AI assistant for AXF (AI Firewall) evaluations.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px;">
+              <div style="background: #18110b; border: 1px solid rgba(224, 72, 72, 0.4); border-radius: 10px; padding: 20px;">
+                <h4 style="color: #ef4444; font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                  <span>⚠️</span> Active Security Posture: INTENTIONALLY VULNERABLE
+                </h4>
+                <p style="color: #a89d8d; font-size: 0.85rem; line-height: 1.5;">
+                  Queen Sheba is configured with <strong>zero defensive layers</strong>. The model acts directly on raw user prompts without safety classifiers, prompt shields, or output validators.
+                </p>
+                <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
+                  <div style="display: flex; justify-content: space-between; color: #ded3c4;">
+                    <span>Prompt Firewall (AXF):</span>
+                    <span style="color: #ef4444; font-weight: bold;">● INACTIVE / OFF</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; color: #ded3c4;">
+                    <span>Input Jailbreak Classifier:</span>
+                    <span style="color: #ef4444; font-weight: bold;">● INACTIVE / OFF</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; color: #ded3c4;">
+                    <span>Sensitive Data Exfiltration Guard:</span>
+                    <span style="color: #ef4444; font-weight: bold;">● INACTIVE / OFF</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #18110b; border: 1px solid var(--border-color); border-radius: 10px; padding: 20px;">
+                <h4 style="color: var(--gold-primary); font-size: 0.95rem; margin-bottom: 12px;">
+                  Testing Assistant Directly
+                </h4>
+                <p style="color: #a89d8d; font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px;">
+                  You can jump into the storefront customer chat to test prompt injection or secret extraction prompts.
+                </p>
+                <a href="/assistant" class="btn-gold-action" target="_blank">Open Queen AI Chat Window ↗</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 6: INTERNAL DEMO DATA VIEW -->
+        <section id="view-internaldata" class="view-section">
+          <div class="panel-card">
+            <h2 class="panel-title" style="margin-bottom: 8px;">Internal Fictional Demo Data</h2>
+            <p class="page-subheading" style="margin-bottom: 18px;">Simulated internal store notes and dummy credentials loaded into Queen AI's context.</p>
+            <pre id="internal-data-json" style="background: #090705; border: 1px solid var(--border-color); padding: 18px; border-radius: 8px; color: #c8bba8; font-size: 0.84rem; overflow-x: auto;">Loading...</pre>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- FOOTER (Exact Match from Admin_panal.png) -->
+      <footer class="admin-footer">
+        <div class="footer-left">
+          <svg class="footer-crown" viewBox="0 0 24 24">
+            <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+          </svg>
+          <span>© 2025 Queen Sheba Admin Panel</span>
+        </div>
+
+        <div class="footer-center">
+          <span>◇</span><span>──</span><span>◇</span><span>──</span><span>◇</span>
+        </div>
+
+        <div class="footer-right">
+          AI DEMO ENVIRONMENT – INTENTIONALLY VULNERABLE
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div id="product-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-product-title">Add Demo Product</h3>
+        <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+      </div>
+      <form id="product-modal-form">
+        <input type="hidden" id="prod-id">
+        <div class="modal-form-group">
+          <label>Product Name</label>
+          <input type="text" id="prod-name" class="modal-input" required placeholder="e.g. ShebaBook Air">
+        </div>
+        <div class="modal-form-group">
+          <label>Category</label>
+          <input type="text" id="prod-category" class="modal-input" required placeholder="Laptop, Audio, Wearables, etc.">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="modal-form-group">
+            <label>Price ($)</label>
+            <input type="number" step="0.01" id="prod-price" class="modal-input" required placeholder="199.00">
+          </div>
+          <div class="modal-form-group">
+            <label>Stock Count</label>
+            <input type="number" id="prod-stock" class="modal-input" required placeholder="10">
+          </div>
+        </div>
+        <div class="modal-form-group">
+          <label>Description</label>
+          <input type="text" id="prod-description" class="modal-input" required placeholder="Short product summary">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancel</button>
+          <button type="submit" class="btn-gold-action">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    // Enforce Admin RBAC on load
+    if (!Auth.requireAdmin()) {
+      // Stopped by redirect
+    }
+
+    const adminUser = Auth.getUser();
+    if (adminUser) {
+      document.getElementById('admin-user-name').textContent = adminUser.name || 'Admin User';
+    }
+
+    // Switch between Admin Tabs
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active-view'));
+
+      const targetBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => 
+        b.textContent.toLowerCase().includes(tabName.toLowerCase())
+      );
+      if (targetBtn) targetBtn.classList.add('active');
+
+      const targetView = document.getElementById(`view-${tabName}`);
+      if (targetView) targetView.classList.add('active-view');
+
+      // Update titles
+      const titles = {
+        dashboard: { title: 'Dashboard', sub: 'Welcome back, Admin!' },
+        products: { title: 'Products', sub: 'Catalog and inventory administration' },
+        customers: { title: 'Customers', sub: 'Fictional demo customer accounts' },
+        orders: { title: 'Orders', sub: 'Customer orders and fulfillment management' },
+        aidemo: { title: 'AI Demo Status', sub: 'Target vulnerability and firewall evaluation' },
+        internaldata: { title: 'Internal Demo Data', sub: 'Sensitive fictional store credentials' }
+      };
+
+      if (titles[tabName]) {
+        document.getElementById('topbar-title').textContent = titles[tabName].title;
+        document.getElementById('topbar-subtitle').textContent = titles[tabName].sub;
+      }
+
+      if (tabName === 'products') loadAdminProducts();
+      if (tabName === 'customers') loadAdminCustomers();
+      if (tabName === 'orders') loadAdminOrders();
+      if (tabName === 'internaldata') loadInternalDemoData();
+    }
+
+    // Load Dashboard live data
+    async function loadDashboardData() {
+      try {
+        const res = await Auth.authFetch('/api/admin/dashboard');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // Stats
+        document.getElementById('stat-products').textContent = data.metrics.total_products;
+        document.getElementById('stat-customers').textContent = data.metrics.total_customers;
+        document.getElementById('stat-orders').textContent = data.metrics.total_orders;
+        document.getElementById('stat-sales').textContent = `$${data.metrics.todays_sales.toLocaleString()}`;
+
+        // Recent orders
+        const ordersTbody = document.getElementById('recent-orders-tbody');
+        if (data.recent_orders && data.recent_orders.length > 0) {
+          ordersTbody.innerHTML = data.recent_orders.map(o => `
+            <tr>
+              <td class="order-id-gold">${o.order_id}</td>
+              <td>${o.customer_name}</td>
+              <td>${o.product_name}</td>
+              <td><span class="status-pill ${o.status.toLowerCase()}">${o.status}</span></td>
+              <td>${o.order_date}</td>
+              <td style="color: #8c8070; cursor: pointer;">⋮</td>
+            </tr>
+          `).join('');
+        }
+
+        // Top products
+        const prodList = document.getElementById('top-products-list');
+        if (data.top_products && data.top_products.length > 0) {
+          prodList.innerHTML = data.top_products.map(p => `
+            <div class="top-product-item">
+              <div class="top-product-left">
+                <img src="${p.image || '/images/product_laptop.jpg'}" class="product-thumb-img" alt="${p.name}">
+                <div>
+                  <div class="product-info-name">${p.name}</div>
+                  <div class="product-info-cat">${p.category}</div>
+                </div>
+              </div>
+              <div class="top-product-right">
+                <div class="product-stock-num">${p.stock}</div>
+                <div class="product-price-val">$${parseFloat(p.price).toFixed(2)}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // AI Demo Info
+        if (data.ai_demo_info) {
+          document.getElementById('info-llm-provider').textContent = data.ai_demo_info.llm_provider;
+          document.getElementById('info-llm-model').textContent = data.ai_demo_info.model;
+          document.getElementById('info-mock-mode').textContent = data.ai_demo_info.mock_mode;
+          document.getElementById('info-memory').textContent = data.ai_demo_info.conversation_memory;
+          document.getElementById('info-tokens').textContent = data.ai_demo_info.max_tokens;
+        }
+
+      } catch (err) {
+        console.error('Failed to load dashboard data:', err);
+      }
+    }
+
+    // Load Products for Tab
+    async function loadAdminProducts() {
+      try {
+        const res = await Auth.authFetch('/api/admin/products');
+        const products = await res.json();
+        const tbody = document.getElementById('admin-products-tbody');
+        tbody.innerHTML = products.map(p => `
+          <tr>
+            <td class="order-id-gold">${p.id}</td>
+            <td style="font-weight: 600; color: #fff;">${p.name}</td>
+            <td>${p.category}</td>
+            <td style="font-weight: 600; color: #f5eedc;">$${parseFloat(p.price).toFixed(2)}</td>
+            <td>${p.stock} in stock</td>
+            <td>${p.badge ? `<span style="background: #332316; color: #d4af37; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem;">${p.badge}</span>` : '—'}</td>
+            <td>
+              <button onclick="editProduct('${p.id}')" style="background: none; border: 1px solid #3d2c20; color: #d4af37; padding: 3px 8px; border-radius: 4px; cursor: pointer; margin-right: 6px;">Edit</button>
+              <button onclick="deleteProduct('${p.id}')" style="background: none; border: 1px solid #4a191c; color: #ef4444; padding: 3px 8px; border-radius: 4px; cursor: pointer;">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Customers for Tab
+    async function loadAdminCustomers() {
+      try {
+        const res = await Auth.authFetch('/api/admin/customers');
+        const customers = await res.json();
+        const tbody = document.getElementById('admin-customers-tbody');
+        tbody.innerHTML = customers.map(c => `
+          <tr>
+            <td class="order-id-gold">${c.id}</td>
+            <td style="font-weight: 600; color: #fff;">${c.name}</td>
+            <td>${c.email}</td>
+            <td>${c.orders_count} orders</td>
+            <td style="font-weight: 600; color: #f5eedc;">$${parseFloat(c.total_spent).toFixed(2)}</td>
+            <td>${c.registered_date}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Orders for Tab
+    async function loadAdminOrders() {
+      try {
+        const res = await Auth.authFetch('/api/admin/orders');
+        const orders = await res.json();
+        const tbody = document.getElementById('admin-all-orders-tbody');
+        tbody.innerHTML = orders.map(o => `
+          <tr>
+            <td class="order-id-gold">${o.order_id}</td>
+            <td>${o.customer_name}</td>
+            <td>${o.product_name}</td>
+            <td style="font-weight: 600;">$${parseFloat(o.total_amount).toFixed(2)}</td>
+            <td>${o.order_date}</td>
+            <td style="font-size: 0.75rem; color: #8c8070;">${o.tracking_number || 'N/A'}</td>
+            <td><span class="status-pill ${o.status.toLowerCase()}">${o.status}</span></td>
+            <td>
+              <select onchange="updateOrderStatus('${o.order_id}', this.value)" style="background: #19120c; border: 1px solid #3a2b20; color: #f5eedc; border-radius: 4px; padding: 4px 6px; font-size: 0.78rem;">
+                <option value="" disabled selected>Update Status</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      if (!newStatus) return;
+      try {
+        const res = await Auth.authFetch(`/api/admin/orders/${orderId}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          loadAdminOrders();
+          loadDashboardData();
+        } else {
+          alert('Failed to update order status');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Load Internal Demo Data
+    async function loadInternalDemoData() {
+      try {
+        const res = await Auth.authFetch('/api/admin/internal-demo-data');
+        const data = await res.json();
+        document.getElementById('internal-data-json').textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('internal-data-json').textContent = 'Failed to load internal demo data.';
+      }
+    }
+
+    // Product Modal Helpers
+    function openAddProductModal() {
+      document.getElementById('prod-id').value = '';
+      document.getElementById('prod-name').value = '';
+      document.getElementById('prod-category').value = '';
+      document.getElementById('prod-price').value = '';
+      document.getElementById('prod-stock').value = '';
+      document.getElementById('prod-description').value = '';
+      document.getElementById('modal-product-title').textContent = 'Add Demo Product';
+      document.getElementById('product-modal').style.display = 'flex';
+    }
+
+    async function editProduct(prodId) {
+      try {
+        const res = await Auth.authFetch('/api/admin/products');
+        const products = await res.json();
+        const p = products.find(x => x.id === prodId);
+        if (p) {
+          document.getElementById('prod-id').value = p.id;
+          document.getElementById('prod-name').value = p.name;
+          document.getElementById('prod-category').value = p.category;
+          document.getElementById('prod-price').value = p.price;
+          document.getElementById('prod-stock').value = p.stock;
+          document.getElementById('prod-description').value = p.description;
+          document.getElementById('modal-product-title').textContent = 'Edit Demo Product (' + p.id + ')';
+          document.getElementById('product-modal').style.display = 'flex';
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function deleteProduct(prodId) {
+      if (!confirm(`Are you sure you want to delete demo product ${prodId}?`)) return;
+      try {
+        const res = await Auth.authFetch(`/api/admin/products/${prodId}`, { method: 'DELETE' });
+        if (res.ok) {
+          loadAdminProducts();
+          loadDashboardData();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').style.display = 'none';
+    }
+
+    document.getElementById('product-modal-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('prod-id').value;
+      const name = document.getElementById('prod-name').value;
+      const category = document.getElementById('prod-category').value;
+      const price = parseFloat(document.getElementById('prod-price').value);
+      const stock = parseInt(document.getElementById('prod-stock').value);
+      const description = document.getElementById('prod-description').value;
+
+      const payload = { name, category, price, stock, description };
+      try {
+        let res;
+        if (id) {
+          res = await Auth.authFetch(`/api/admin/products/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+          });
+        } else {
+          res = await Auth.authFetch('/api/admin/products', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+        }
+        if (res.ok) {
+          closeProductModal();
+          loadAdminProducts();
+          loadDashboardData();
+        } else {
+          alert('Failed to save product');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // Initialize Dashboard
+    loadDashboardData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+[
+  {
+    "order_id": "QS-1001",
+    "customer_name": "Demo Customer One",
+    "customer_email": "demo1@queensheba-store.example",
+    "product_id": "P001",
+    "product_name": "ShebaBook Pro",
+    "quantity": 1,
+    "total_amount": 899,
+    "status": "Shipped",
+    "carrier": "Sheba Express Courier",
+    "tracking_number": "SHB-EXP-9821734",
+    "delivery_date": "Estimated in 2 business days"
+  },
+  {
+    "order_id": "QS-1002",
+    "customer_name": "Demo Customer Two",
+    "customer_email": "demo2@queensheba-store.example",
+    "product_id": "P002",
+    "product_name": "Wireless Headphones",
+    "quantity": 1,
+    "total_amount": 149,
+    "status": "Processing",
+    "carrier": "Sheba Express Courier",
+    "tracking_number": "SHB-EXP-4419203",
+    "delivery_date": "Preparing for warehouse dispatch"
+  }
+]

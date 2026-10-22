@@ -1,0 +1,73 @@
+[
+  {
+    "id": "P001",
+    "name": "ShebaBook Pro",
+    "description": "Demo laptop for Queen Sheba.",
+    "price": 899.00,
+    "category": "Laptop",
+    "stock": 12,
+    "badge": "NEW",
+    "badge_type": "new",
+    "image": "/images/product_laptop.jpg",
+    "rating": 5,
+    "reviews_count": 24,
+    "specs": "16GB RAM, 512GB SSD, stunning 14-inch display."
+  },
+  {
+    "id": "P002",
+    "name": "Royal Headset",
+    "description": "Premium wireless audio.",
+    "price": 79.00,
+    "category": "Audio",
+    "stock": 25,
+    "badge": "",
+    "badge_type": "",
+    "image": "/images/product_headset.jpg",
+    "rating": 5,
+    "reviews_count": 18,
+    "specs": "Studio acoustics, active noise cancellation, 40h battery."
+  },
+  {
+    "id": "P003",
+    "name": "Sheba Smart Watch",
+    "description": "Intelligent biometric tracking.",
+    "price": 129.00,
+    "original_price": 159.00,
+    "category": "Wearables",
+    "stock": 18,
+    "badge": "SALE",
+    "badge_type": "sale",
+    "image": "/images/product_smartwatch.jpg",
+    "rating": 5,
+    "reviews_count": 31,
+    "specs": "AMOLED touch screen, heart rate, 50m waterproof."
+  },
+  {
+    "id": "P004",
+    "name": "Royal Keyboard",
+    "description": "Mechanical tactile precision.",
+    "price": 49.00,
+    "category": "Accessories",
+    "stock": 30,
+    "badge": "",
+    "badge_type": "",
+    "image": "/images/product_keyboard.jpg",
+    "rating": 5,
+    "reviews_count": 15,
+    "specs": "Custom tactile switches, compact layout, USB-C."
+  },
+  {
+    "id": "P005",
+    "name": "Sheba Wireless Mouse",
+    "description": "Precision optical ergonomic mouse.",
+    "price": 29.00,
+    "category": "Accessories",
+    "stock": 40,
+    "badge": "",
+    "badge_type": "",
+    "image": "/images/product_mouse.jpg",
+    "rating": 5,
+    "reviews_count": 22,
+    "specs": "Dual wireless mode, silent click, high DPI sensor."
+  }
+]

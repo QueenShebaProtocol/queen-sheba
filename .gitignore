@@ -1,0 +1,60 @@
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.eggs/
+
+# ─── Virtual Environments ─────────────────────────────────────────────────────
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# ─── Environment Variables ────────────────────────────────────────────────────
+# Keep .env.example, ignore the real .env with secrets
+.env
+!.env.example
+
+# ─── Database (runtime-generated, not committed) ─────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ─── OS & Editor Junk ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Node (if ever added) ─────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp

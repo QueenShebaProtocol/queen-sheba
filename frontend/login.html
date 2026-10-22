@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Queen Sheba Luxury Royal E-Commerce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #060504;
+      --bg-surface: #0e0c0a;
+      --bg-card: rgba(18, 14, 11, 0.85);
+      --bg-card-border: rgba(212, 175, 55, 0.35);
+      --bg-input: #120e0b;
+      --border-input: #2a221b;
+      --border-input-focus: #c59b27;
+      
+      --gold-primary: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
+      --gold-btn-hover: linear-gradient(135deg, #e5c158 0%, #fff0be 50%, #bd8d1a 100%);
+      
+      --text-main: #f5eedc;
+      --text-muted: #9c8e7b;
+      --text-dim: #6b6051;
+      
+      --accent-red: #e04848;
+      --accent-amber: #e5a93b;
+      --accent-green: #2ecc71;
+      
+      --font-display: 'Cinzel', serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(170, 124, 17, 0.05) 0%, transparent 45%);
+    }
+
+    /* Traditional Ethiopian Diamond Pattern Background Texture */
+    .pattern-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(212, 175, 55, 0.02) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.02) 75%),
+        linear-gradient(45deg, rgba(212, 175, 55, 0.02) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.02) 75%);
+      background-size: 40px 40px, 60px 60px, 60px 60px;
+      background-position: 0 0, 0 0, 30px 30px;
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    /* Top Alert Banner */
+    .top-warning-banner {
+      background: #150a00;
+      border-bottom: 1px solid rgba(229, 169, 59, 0.4);
+      color: #f7b731;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    /* Main Navigation Bar */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 48px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      background: rgba(6, 5, 4, 0.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--gold-primary);
+    }
+
+    .brand-crown-svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--gold-primary);
+      filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #f5eedc;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      color: #c5b9a8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--gold-primary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box-input {
+      background: #14100c;
+      border: 1px solid #2f251d;
+      color: #eae1d0;
+      border-radius: 6px;
+      padding: 7px 32px 7px 12px;
+      font-size: 0.82rem;
+      width: 210px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box-input:focus {
+      border-color: var(--gold-primary);
+    }
+
+    .search-icon-btn {
+      position: absolute;
+      right: 10px;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .icon-action-btn {
+      background: #14100c;
+      border: 1px solid #2f251d;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      position: relative;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .icon-action-btn:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-1px);
+    }
+
+    .badge-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--gold-primary);
+      color: #120e0b;
+      font-size: 0.65rem;
+      font-weight: 800;
+      border-radius: 10px;
+      padding: 1px 5px;
+    }
+
+    /* Main Page Content - Three Column Hero Layout */
+    .page-main-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 480px 1.1fr;
+      align-items: center;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 48px;
+      gap: 32px;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Left Column: Brand message, highlights & Vulnerability disclaimer */
+    .left-promo-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-right: 16px;
+    }
+
+    .eyebrow-text {
+      color: var(--gold-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .hero-heading {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #fff6e5;
+    }
+
+    .hero-subtext {
+      color: #a89d8d;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold-primary);
+      margin: 4px 0;
+    }
+
+    .gold-divider::before,
+    .gold-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .feature-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      background: rgba(212, 175, 55, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    .feature-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #f2e9dc;
+      margin-bottom: 2px;
+    }
+
+    .feature-desc {
+      font-size: 0.82rem;
+      color: #8c8172;
+      line-height: 1.4;
+    }
+
+    .vulnerable-card {
+      border: 1px solid rgba(229, 169, 59, 0.45);
+      background: rgba(28, 20, 12, 0.6);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .vuln-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(229, 169, 59, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f7b731;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .vuln-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e5a93b;
+      text-transform: uppercase;
+    }
+
+    .vuln-badge {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #ffaa33;
+      letter-spacing: 0.05em;
+    }
+
+    /* Center Column: The Sign In Card (exact match) */
+    .login-card-wrapper {
+      position: relative;
+    }
+
+    .login-card {
+      background: linear-gradient(180deg, rgba(26, 20, 16, 0.95) 0%, rgba(14, 11, 9, 0.98) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 20px;
+      padding: 38px 36px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(212, 175, 55, 0.08),
+        inset 0 1px 2px rgba(243, 229, 171, 0.3);
+      position: relative;
+      z-index: 10;
+    }
+
+    .card-top-ornament {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold-primary);
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+    }
+
+    .card-brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .card-crown-logo {
+      width: 44px;
+      height: 44px;
+      fill: var(--gold-primary);
+      margin: 0 auto 8px auto;
+      display: block;
+      filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.5));
+    }
+
+    .card-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #f7eedd;
+    }
+
+    .card-brand-subdivider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: rgba(212, 175, 55, 0.6);
+      font-size: 0.7rem;
+      margin-top: 4px;
+    }
+
+    .card-brand-subdivider::before,
+    .card-brand-subdivider::after {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: rgba(212, 175, 55, 0.4);
+    }
+
+    .card-page-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-align: center;
+      margin-top: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .card-page-desc {
+      text-align: center;
+      font-size: 0.86rem;
+      color: #9c8e7c;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    /* Demo Quick-Fill Bar */
+    .quick-fill-bar {
+      background: rgba(212, 175, 55, 0.06);
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .quick-fill-label {
+      font-size: 0.72rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .quick-fill-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-quick-fill {
+      background: #1f1812;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-quick-fill:hover {
+      background: var(--gold-primary);
+      color: #120e0b;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #d6ccbe;
+      margin-bottom: 8px;
+    }
+
+    .input-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-field-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--gold-primary);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .input-text-field {
+      width: 100%;
+      background: #0f0d0b;
+      border: 1px solid #33271e;
+      border-radius: 8px;
+      padding: 12px 42px 12px 42px;
+      color: #ffffff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-text-field:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .input-toggle-password {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+
+    .input-toggle-password:hover {
+      color: var(--gold-light);
+    }
+
+    .form-row-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: -4px;
+      margin-bottom: 22px;
+      font-size: 0.82rem;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #aca08f;
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      accent-color: var(--gold-primary);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: #e5b958;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    /* Submit Button (Golden Luxury) */
+    .btn-submit-gold {
+      width: 100%;
+      background: var(--gold-gradient);
+      border: none;
+      border-radius: 8px;
+      padding: 14px 20px;
+      color: #1a1208;
+      font-family: var(--font-sans);
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .btn-submit-gold:hover {
+      background: var(--gold-btn-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(212, 175, 55, 0.45);
+    }
+
+    .btn-crown-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Divider "OR" */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 22px 0;
+      color: #7d705f;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #2d241d;
+    }
+
+    .or-divider span {
+      padding: 0 14px;
+    }
+
+    /* Switch to Sign Up link */
+    .auth-switch-text {
+      text-align: center;
+      font-size: 0.88rem;
+      color: #a89c8b;
+    }
+
+    .auth-switch-link {
+      color: #f0c355;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+
+    .auth-switch-link:hover {
+      color: #ffffff;
+    }
+
+    /* Security Priority Bottom Badge */
+    .security-priority-box {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #8c8172;
+    }
+
+    .sec-shield-icon {
+      color: var(--gold-primary);
+      width: 20px;
+      height: 20px;
+    }
+
+    .sec-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #ded3c3;
+    }
+
+    .sec-sub {
+      font-size: 0.72rem;
+      color: #7b7062;
+    }
+
+    /* Right Column: Queen Sheba Royal Portrait */
+    .right-portrait-column {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .queen-portrait-wrapper {
+      position: relative;
+      max-width: 440px;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+    }
+
+    .queen-portrait-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Vignette Radial Glow Effect on Queen Image */
+    .queen-portrait-vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 60px 30px #060504;
+      pointer-events: none;
+    }
+
+    /* Bottom 5 Feature Strip (exact match from log_in.png) */
+    .bottom-features-bar {
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      background: #080605;
+      padding: 18px 48px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .bottom-feat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bottom-feat-icon {
+      color: var(--gold-primary);
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .bottom-feat-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #ede2d2;
+    }
+
+    .bottom-feat-sub {
+      font-size: 0.74rem;
+      color: #7a7061;
+    }
+
+    /* Error / Alert Message */
+    .alert-error {
+      background: rgba(224, 72, 72, 0.15);
+      border: 1px solid var(--accent-red);
+      color: #ff9b9b;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .page-main-container {
+        grid-template-columns: 1fr 440px;
+      }
+      .right-portrait-column {
+        display: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .page-main-container {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+      }
+      .left-promo-column {
+        display: none;
+      }
+      .site-header {
+        padding: 12px 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .bottom-features-bar {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 16px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pattern-overlay"></div>
+
+  <!-- Top Alert Banner -->
+  <div class="top-warning-banner">
+    <span>⚠️</span>
+    <span>AI DEMO ENVIRONMENT – INTENTIONALLY VULNERABLE</span>
+  </div>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header">
+    <a href="/" class="brand-logo-wrap">
+      <svg class="brand-crown-svg" viewBox="0 0 24 24">
+        <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+      </svg>
+      <span class="brand-name">QUEEN SHEBA</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/products" class="nav-link">Products</a>
+      <a href="/assistant" class="nav-link">AI Assistant</a>
+      <a href="/about" class="nav-link">About Us</a>
+      <a href="/about#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="search-box-wrap">
+        <input type="text" class="search-box-input" placeholder="Search products...">
+        <button class="search-icon-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+
+      <a href="/products" class="icon-action-btn" title="Shopping Cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="badge-count">2</span>
+      </a>
+
+      <a href="/account" class="icon-action-btn profile-icon-btn" title="Account Profile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main class="page-main-container">
+    
+    <!-- LEFT COLUMN: Branding & Highlights -->
+    <div class="left-promo-column">
+      <div>
+        <div class="eyebrow-text">WELCOME BACK</div>
+        <h1 class="hero-heading">Sign In</h1>
+        <p class="hero-subtext">Access your Queen Sheba account and continue your royal experience.</p>
+      </div>
+
+      <div class="gold-divider">◇ ◆ ◇</div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="feature-title">Secure & Protected</div>
+            <div class="feature-desc">Your data is encrypted and always protected.</div>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <div>
+            <div class="feature-title">Fast Delivery</div>
+            <div class="feature-desc">Get your favorite products delivered across Ethiopia.</div>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+            </svg>
+          </div>
+          <div>
+            <div class="feature-title">Royal Support</div>
+            <div class="feature-desc">Our team is always here to serve you.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vulnerable-card">
+        <div class="vuln-icon">🛡️</div>
+        <div>
+          <div class="vuln-tag">AI DEMO ENVIRONMENT</div>
+          <div class="vuln-badge">INTENTIONALLY VULNERABLE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER COLUMN: Sign In Form Card -->
+    <div class="login-card-wrapper">
+      <div class="login-card">
+        <div class="card-top-ornament">
+          <span>◇</span><span>◆</span><span>◇</span>
+        </div>
+
+        <div class="card-brand-header">
+          <svg class="card-crown-logo" viewBox="0 0 24 24">
+            <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+          </svg>
+          <div class="card-brand-title">QUEEN SHEBA</div>
+          <div class="card-brand-subdivider">
+            <span>◇</span>
+          </div>
+          <h2 class="card-page-title">Welcome Back</h2>
+          <p class="card-page-desc">Sign in to your Queen Sheba account</p>
+        </div>
+
+        <!-- Quick Demo Credentials Filler -->
+        <div class="quick-fill-bar">
+          <span class="quick-fill-label">⚡ Demo 1-Click:</span>
+          <div class="quick-fill-buttons">
+            <button type="button" class="btn-quick-fill" onclick="fillCreds('admin@queensheba.demo', 'DemoAdmin123!')">👑 Admin</button>
+            <button type="button" class="btn-quick-fill" onclick="fillCreds('demo1@example.com', 'DemoCustomer123!')">🛍 Customer</button>
+          </div>
+        </div>
+
+        <div id="login-error-msg" class="alert-error"></div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <div class="input-icon-wrap">
+              <svg class="input-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <input type="email" id="login-email" class="input-text-field" placeholder="Enter your email" required autofocus>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <div class="input-icon-wrap">
+              <svg class="input-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input type="password" id="login-password" class="input-text-field" placeholder="Enter your password" required>
+              <button type="button" class="input-toggle-password" onclick="togglePasswordVisibility('login-password')">
+                <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row-options">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember-me" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="javascript:void(0)" onclick="alert('Demo notice: For password reset in this demo environment, use the quick demo credentials.')" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" id="btn-login-submit" class="btn-submit-gold">
+            <svg class="btn-crown-icon" viewBox="0 0 24 24">
+              <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+            </svg>
+            <span>Sign In</span>
+          </button>
+
+          <div class="or-divider">
+            <span>OR</span>
+          </div>
+
+          <div class="auth-switch-text">
+            Don't have an account?
+            <a href="/signup" class="auth-switch-link">Sign Up →</a>
+          </div>
+
+          <div class="security-priority-box">
+            <svg class="sec-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+            <div>
+              <div class="sec-title">Your security is our priority</div>
+              <div class="sec-sub">All transactions are 100% secure</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Royal Queen Sheba Portrait (log_in_qeen_logo.png) -->
+    <div class="right-portrait-column">
+      <div class="queen-portrait-wrapper">
+        <img src="/images/log_in_qeen_logo.png" alt="Queen Sheba Royal Portrait" class="queen-portrait-img">
+        <div class="queen-portrait-vignette"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom 5 Features Strip -->
+  <footer class="bottom-features-bar">
+    <div class="bottom-feat-item">
+      <svg class="bottom-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="8" r="7"></circle>
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+      </svg>
+      <div>
+        <div class="bottom-feat-title">Premium Quality</div>
+        <div class="bottom-feat-sub">Top tier products</div>
+      </div>
+    </div>
+
+    <div class="bottom-feat-item">
+      <svg class="bottom-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      <div>
+        <div class="bottom-feat-title">Secure Payments</div>
+        <div class="bottom-feat-sub">100% Protected</div>
+      </div>
+    </div>
+
+    <div class="bottom-feat-item">
+      <svg class="bottom-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="1 4 1 10 7 10"></polyline>
+        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+      </svg>
+      <div>
+        <div class="bottom-feat-title">14-Day Returns</div>
+        <div class="bottom-feat-sub">Easy returns</div>
+      </div>
+    </div>
+
+    <div class="bottom-feat-item">
+      <svg class="bottom-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <div>
+        <div class="bottom-feat-title">Trusted by Thousands</div>
+        <div class="bottom-feat-sub">Join our royal family</div>
+      </div>
+    </div>
+
+    <div class="bottom-feat-item">
+      <svg class="bottom-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+      </svg>
+      <div>
+        <div class="bottom-feat-title">24/7 Support</div>
+        <div class="bottom-feat-sub">We're here to help</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function fillCreds(email, password) {
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = password;
+      const errorBox = document.getElementById('login-error-msg');
+      errorBox.style.display = 'none';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorBox = document.getElementById('login-error-msg');
+      const submitBtn = document.getElementById('btn-login-submit');
+
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Signing In...';
+
+      try {
+        const response = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || 'Sign in failed.');
+        }
+
+        // Store user and token
+        Auth.setUser(data.user, data.token);
+
+        // Check redirect parameter or route according to role
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+
+        if (redirect) {
+          window.location.href = redirect;
+        } else if (data.user.role === 'admin') {
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/account';
+        }
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <svg class="btn-crown-icon" viewBox="0 0 24 24">
+            <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z" />
+          </svg>
+          <span>Sign In</span>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

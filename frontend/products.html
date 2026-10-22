@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection | Queen Sheba Store</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="/" class="brand-logo">
+        <span class="brand-crown">👑</span>
+        <div class="brand-title">QUEEN <span>SHEBA</span></div>
+      </a>
+      
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/products" class="nav-link active">Products</a></li>
+          <li><a href="/assistant" class="nav-link">Queen AI</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="demo-badge-header">
+        <span class="pulse-dot-red"></span>
+        AI Demo Environment
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <div class="section-header">
+      <div>
+        <span class="section-tag">Royal Catalog</span>
+        <h1 class="section-title">The Collection</h1>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="filter-chip quick-chip active" data-category="all">All Products</button>
+        <button class="filter-chip quick-chip" data-category="laptops">Laptops</button>
+        <button class="filter-chip quick-chip" data-category="audio">Audio</button>
+        <button class="filter-chip quick-chip" data-category="wearables">Wearables</button>
+        <button class="filter-chip quick-chip" data-category="accessories">Accessories</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-container" class="products-grid">
+      <!-- Loaded dynamically via js/products.js -->
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <span style="font-family: var(--font-serif); font-weight: 700; color: #FFF;">QUEEN SHEBA</span>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Fictional Demonstration E-Commerce Platform</p>
+      </div>
+      <div style="font-size: 0.78rem; color: #9CA3AF;">
+        Explore demo inventory. Ask Queen AI about pricing, specifications, or stock.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/products.js"></script>
+</body>
+</html>
