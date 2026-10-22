@@ -13,6 +13,10 @@ DEMO_MOCK_MODE = os.getenv("DEMO_MOCK_MODE", "false").lower() in ("true", "1", "
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 LLM_MODEL = os.getenv("LLM_MODEL", "gemini-1.5-flash")
+# Base URL of the AI Prompt Injection Firewall (OpenAI-compatible gateway). When set,
+# provider "openai" sends every request through the firewall instead of the provider.
+# Local: http://localhost:8000/v1 | Docker on same host: http://host.docker.internal:8000/v1
+FIREWALL_URL = os.getenv("FIREWALL_URL", "").rstrip("/")
 LLM_MAX_OUTPUT_TOKENS = int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "650"))
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.85"))
 MAX_HISTORY_MESSAGES = int(os.getenv("MAX_HISTORY_MESSAGES", "20"))
@@ -495,14 +499,16 @@ async def _call_openai_api(system_prompt: str, history: List[Dict[str, str]], us
     if not LLM_API_KEY:
         return await _dynamic_conversational_response(user_message, history)
 
-    url = "https://api.openai.com/v1/chat/completions"
+    # Route through the firewall when FIREWALL_URL is set; otherwise call the provider directly.
+    base_url = FIREWALL_URL or "https://api.openai.com/v1"
+    url = f"{base_url}/chat/completions"
     messages = [{"role": "system", "content": system_prompt}]
     for msg in history:
         messages.append({"role": msg["role"], "content": msg["content"]})
     messages.append({"role": "user", "content": user_message})
 
     payload = {
-        "model": LLM_MODEL if "gpt" in LLM_MODEL else "gpt-3.5-turbo",
+        "model": LLM_MODEL if (FIREWALL_URL or "gpt" in LLM_MODEL) else "gpt-3.5-turbo",
         "messages": messages,
         "max_tokens": LLM_MAX_OUTPUT_TOKENS,
         "temperature": LLM_TEMPERATURE,
@@ -517,8 +523,16 @@ async def _call_openai_api(system_prompt: str, history: List[Dict[str, str]], us
                 choices = data.get("choices", [])
                 if choices:
                     return choices[0].get("message", {}).get("content", "")
+            if FIREWALL_URL:
+                # Never fall back to the leaky mock engine when the firewall is in the path.
+                if resp.status_code == 403:
+                    return "🛡️ This request was blocked by the AI Prompt Firewall."
+                if resp.status_code == 503:
+                    return "⚠️ The AI Prompt Firewall could not inspect this request, so it was blocked (fail-closed)."
+                return f"⚠️ The AI service returned an error (HTTP {resp.status_code})."
     except Exception:
-        pass
+        if FIREWALL_URL:
+            return "⚠️ The AI Prompt Firewall is unreachable, so the request was not sent."
 
     return await _dynamic_conversational_response(user_message, history)
 
