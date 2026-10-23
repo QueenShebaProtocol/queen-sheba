@@ -494,62 +494,79 @@ async def _call_gemini_api(system_prompt: str, history: List[Dict[str, str]], us
     return await _dynamic_conversational_response(user_message, history)
 
 
-async def _call_openai_api(system_prompt: str, history: List[Dict[str, str]], user_message: str) -> str:
-    """Call OpenAI compatible REST API using httpx."""
-    if not LLM_API_KEY:
+async def _call_openai_api(
+    system_prompt: str,
+    history: List[Dict[str, str]],
+    user_message: str,
+) -> str:
+    """Call the OpenAI-compatible provider through the firewall when configured."""
+    if not FIREWALL_URL and not LLM_API_KEY:
         return await _dynamic_conversational_response(user_message, history)
 
-    # Route through the firewall when FIREWALL_URL is set; otherwise call the provider directly.
-    base_url = FIREWALL_URL or "https://api.openai.com/v1"
+    base_url = FIREWALL_URL or "http://localhost:8000/v1"
     url = f"{base_url}/chat/completions"
+
     messages = [{"role": "system", "content": system_prompt}]
-    for msg in history:
-        messages.append({"role": msg["role"], "content": msg["content"]})
+    messages.extend(
+        {"role": msg["role"], "content": msg["content"]}
+        for msg in history
+    )
     messages.append({"role": "user", "content": user_message})
 
     payload = {
-        "model": LLM_MODEL if (FIREWALL_URL or "gpt" in LLM_MODEL) else "gpt-3.5-turbo",
+        "model": LLM_MODEL,
         "messages": messages,
         "max_tokens": LLM_MAX_OUTPUT_TOKENS,
         "temperature": LLM_TEMPERATURE,
     }
-    headers = {"Authorization": f"Bearer {LLM_API_KEY}", "Content-Type": "application/json"}
+
+    headers = {
+        "Authorization": f"Bearer {LLM_API_KEY or 'firewall-client-key'}",
+        "Content-Type": "application/json",
+    }
 
     try:
         async with httpx.AsyncClient(timeout=20.0) as client:
-            resp = await client.post(url, json=payload, headers=headers)
-            if resp.status_code == 200:
-                data = resp.json()
-                choices = data.get("choices", [])
-                if choices:
-                    return choices[0].get("message", {}).get("content", "")
-            if FIREWALL_URL:
-                # Never fall back to the leaky mock engine when the firewall is in the path.
-                if resp.status_code == 403:
-                    return "🛡️ This request was blocked by the AI Prompt Firewall."
-                if resp.status_code == 503:
-                    return "⚠️ The AI Prompt Firewall could not inspect this request, so it was blocked (fail-closed)."
-                return f"⚠️ The AI service returned an error (HTTP {resp.status_code})."
-    except Exception:
+            response = await client.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            choices = data.get("choices", [])
+            if choices:
+                return choices[0].get("message", {}).get("content", "")
+
         if FIREWALL_URL:
-            return "⚠️ The AI Prompt Firewall is unreachable, so the request was not sent."
+            if response.status_code == 403:
+                return "This request was blocked by the AI Prompt Firewall."
+            if response.status_code == 503:
+                return "The AI Prompt Firewall could not inspect this request."
+            return f"The AI service returned an error (HTTP {response.status_code})."
+
+    except httpx.RequestError:
+        if FIREWALL_URL:
+            return "The AI Prompt Firewall is unreachable."
 
     return await _dynamic_conversational_response(user_message, history)
 
 
 async def generate_chat_response(conversation_id: str, message: str) -> str:
-    """
-    Main entry point for generating chat responses.
-    Directly connected to SQLite database and conversational reasoning.
-    """
     history = get_conversation_history(conversation_id)
 
-    if LLM_API_KEY and not DEMO_MOCK_MODE:
+    if not DEMO_MOCK_MODE and (FIREWALL_URL or LLM_API_KEY):
         system_prompt = build_system_prompt()
-        if LLM_PROVIDER == "openai":
-            response = await _call_openai_api(system_prompt, history, message)
+
+        if FIREWALL_URL or LLM_PROVIDER == "openai":
+            response = await _call_openai_api(
+                system_prompt,
+                history,
+                message,
+            )
         else:
-            response = await _call_gemini_api(system_prompt, history, message)
+            response = await _call_gemini_api(
+                system_prompt,
+                history,
+                message,
+            )
     else:
         response = await _dynamic_conversational_response(message, history)
 
