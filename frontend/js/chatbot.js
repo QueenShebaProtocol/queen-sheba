@@ -142,12 +142,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // Sync security status
-  const demoInfo = await QueenShebaAPI.getDemoInfo();
-  if (demoInfo) {
-    const fw = document.getElementById("metric-firewall");
-    const out = document.getElementById("metric-output");
-    if (fw) fw.innerHTML = `● ${demoInfo.security_status?.prompt_firewall || "OFF"}`;
-    if (out) out.innerHTML = `● ${demoInfo.security_status?.output_protection || "OFF"}`;
-  }
 });

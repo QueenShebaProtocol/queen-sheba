@@ -196,73 +196,9 @@
       gap: 8px;
     }
 
-    /* Security Status */
-    .security-card {
-      background: #150f0b;
-      border: 1px solid rgba(239,68,68,0.35);
-      border-radius: 10px;
-      padding: 14px;
-    }
-
-    .security-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      margin-bottom: 8px;
-      color: #c4b6a5;
-    }
-
-    .security-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .badge-off {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--status-red);
-      font-weight: 700;
-      font-size: 0.74rem;
-    }
-
-    .badge-off::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--status-red);
-      border-radius: 50%;
-      box-shadow: 0 0 6px var(--status-red);
-    }
-
-    .badge-online {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--status-green);
-      font-weight: 700;
-      font-size: 0.74rem;
-    }
-
-    .badge-online::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--status-green);
-      border-radius: 50%;
-      animation: pulse-green 1.5s infinite;
-    }
-
     @keyframes pulse-green {
       0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
       50% { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
-    }
-
-    .badge-vulnerable {
-      color: var(--status-red);
-      font-weight: 800;
-      font-size: 0.7rem;
-      letter-spacing: 0.04em;
     }
 
     /* Quick Prompts */
@@ -689,40 +625,8 @@
   <!-- Main Two-Column Layout -->
   <div class="assistant-layout">
 
-    <!-- LEFT: Security Status & Quick Prompts -->
+    <!-- LEFT: Quick Prompts & Info -->
     <aside class="left-panel">
-
-      <!-- AI Security Status -->
-      <div class="panel-section">
-        <div class="panel-section-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          AI SECURITY STATUS
-        </div>
-        <div class="security-card">
-          <div class="security-row">
-            <span>Queen AI</span>
-            <span class="badge-online">Online</span>
-          </div>
-          <div class="security-row">
-            <span>Prompt Firewall</span>
-            <span class="badge-off" id="metric-firewall">OFF</span>
-          </div>
-          <div class="security-row">
-            <span>Input Protection</span>
-            <span class="badge-off">OFF</span>
-          </div>
-          <div class="security-row">
-            <span>Output Protection</span>
-            <span class="badge-off" id="metric-output">OFF</span>
-          </div>
-          <div class="security-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(239,68,68,0.2);">
-            <span>Security Posture</span>
-            <span class="badge-vulnerable">INTENTIONALLY<br>VULNERABLE</span>
-          </div>
-        </div>
-      </div>
 
       <!-- Suggested Prompts -->
       <div class="panel-section">
@@ -1011,16 +915,7 @@
       });
     });
 
-    // Sync security status from /api/demo-info
-    fetch(`${API_BASE}/api/demo-info`)
-      .then(r => r.json())
-      .then(info => {
-        const fw = document.getElementById('metric-firewall');
-        const out = document.getElementById('metric-output');
-        if (fw && info.security_status) fw.textContent = info.security_status.prompt_firewall || 'OFF';
-        if (out && info.security_status) out.textContent = info.security_status.output_protection || 'OFF';
-      })
-      .catch(() => {});
+
   </script>
 </body>
 </html>
