@@ -725,64 +725,6 @@ body {
   color: var(--gold-primary);
 }
 
-/* ==========================================================================
-   Right Column: AI Security Status
-   ========================================================================== */
-.security-status-panel {
-  background-color: var(--burgundy-panel);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  border-radius: 10px;
-  padding: 16px 18px;
-  position: relative;
-  overflow: hidden;
-}
-
-.security-panel-title {
-  font-family: var(--font-serif);
-  font-size: 0.86rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--gold-primary);
-  margin-bottom: 14px;
-}
-
-.security-metric-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 0.76rem;
-}
-
-.metric-label {
-  color: var(--text-gray);
-}
-
-.metric-val-off {
-  color: var(--status-red);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.metric-val-vulnerable {
-  color: var(--status-red);
-  font-weight: 700;
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-}
-
-.security-bg-watermark {
-  position: absolute;
-  right: -10px;
-  bottom: -15px;
-  width: 90px;
-  height: 100px;
-  opacity: 0.18;
-  pointer-events: none;
-}
-
 /* Responsive adjustment */
 @media (max-width: 1200px) {
   .app-master-layout {
